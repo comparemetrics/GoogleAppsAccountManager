@@ -1,0 +1,29 @@
+#!/usr/bin/python2.7
+#
+# GoogleAppsAccountManager: gapps-tool
+# Copyright (C) 2012-2013 KAMEI Yutaka
+#
+# License: GNU General Public License version 2 or later
+# Date: 2012-12-28, since 2012-12-28
+#
+
+import sys
+import signal
+import argparse
+from GoogleAppsAccountManager import frontend
+
+signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+parser = argparse.ArgumentParser(description="Front-end tool for GoogleAppsAccountManager")
+
+try:
+    subcommand = sys.argv[1]
+except:
+    sys.stdout.write(frontend.GLOBAL_HELP)
+    sys.exit(1)
+
+return_bool = frontend.run(subcommand, sys.argv[2:])
+if return_bool:
+    sys.exit(0)
+else:
+    sys.exit(1)

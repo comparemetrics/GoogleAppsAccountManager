@@ -1,0 +1,182 @@
+# gapps-tool command line completion
+# Copyright (C) 2012-2013 KAMEI Yutaka
+#
+# License: GNU General Public License version 2 or later
+# Date: 2013-01-10, since 2012-12-28
+#
+
+# Common options
+_common_options()
+{
+    local long_options cur
+    COMPREPLY=()
+    long_options="--admin-name --domain --result-file --csv-file"
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    case ${prev} in
+    --result-file)
+        COMPREPLY=( $(compgen -f -- "${cur}") )
+        return 0
+        ;;
+    --csv-file)
+        COMPREPLY=( $(compgen -f -- "${cur}") )
+        return 0
+        ;;
+    esac
+
+    COMPREPLY=( $(compgen -W "${long_options}" -- "${cur}") )
+}
+
+# gapps-tool <subcommand>
+_user()
+{
+    local subcommands cur pos_2
+    COMPREPLY=()
+    subcommands="create modify delete disable enable passwd list"
+    pos_2="${COMP_WORDS[2]}"
+    cur="${COMP_WORDS[COMP_CWORD]}"
+
+    # prevent stopping
+    if [[ "${cur}" == ${pos_2} ]];then
+        COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
+        return 0
+    fi
+
+    case "${pos_2}" in
+    create)
+        _common_options
+        COMPREPLY+=( $( compgen -W "--md5 --lock" -- ${cur} ) )
+        return 0
+        ;;
+    modify)
+        _common_options
+        COMPREPLY+=( $( compgen -W "--password --md5 --lock --unlock --sn --given-name" -- ${cur} ) )
+        return 0
+        ;;
+    passwd)
+        _common_options
+        COMPREPLY+=( $( compgen -W "--md5" -- ${cur} ) )
+        return 0
+        ;;
+    delete|disable|enable|list)
+        _common_options
+        return 0
+        ;;
+    esac
+
+    COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
+}
+
+_group()
+{
+    local subcommands cur pos_2
+    COMPREPLY=()
+    subcommands="create modify delete addmember deletemember assignowner demoteowner list listgroupsof listmembersof listownersof"
+    pos_2="${COMP_WORDS[2]}"
+    cur="${COMP_WORDS[COMP_CWORD]}"
+
+    # prevent stopping
+    if [[ "${cur}" == ${pos_2} ]];then
+        COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
+        return 0
+    fi
+
+    case "${pos_2}" in
+    create|modify)
+        _common_options
+        COMPREPLY+=( $( compgen -W "--group-name --description" -- ${cur} ) )
+        return 0
+        ;;
+    delete|addmember|deletemember|assignowner|demoteowner|list|listgroupsof|listmembersof|listownersof)
+        _common_options
+        return 0
+        ;;
+    esac
+
+    COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
+}
+
+_ou()
+{
+    local subcommands cur pos_2
+    COMPREPLY=()
+    subcommands="create modify delete moveuser list listuserswithou"
+    pos_2="${COMP_WORDS[2]}"
+    cur="${COMP_WORDS[COMP_CWORD]}"
+
+    # prevent stopping
+    if [[ "${cur}" == ${pos_2} ]];then
+        COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
+        return 0
+    fi
+
+    case "${pos_2}" in
+    create)
+        _common_options
+        COMPREPLY+=( $( compgen -W "--description --block-inheritance" -- ${cur} ) )
+        return 0
+        ;;
+    modify)
+        _common_options
+        COMPREPLY+=( $( compgen -W "--description --block-inheritance --unblock-inheritance" -- ${cur} ) )
+        return 0
+        ;;
+    delete|moveuser|list|listuserswithou)
+        _common_options
+        return 0
+        ;;
+    esac
+
+    COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
+}
+
+_nickname()
+{
+    local subcommands cur pos_2
+    COMPREPLY=()
+    subcommands="create delete list listnicknamesof"
+    pos_2="${COMP_WORDS[2]}"
+    cur="${COMP_WORDS[COMP_CWORD]}"
+
+    # prevent stopping
+    if [[ "${cur}" == ${pos_2} ]];then
+        COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
+        return 0
+    fi
+
+    case "${pos_2}" in
+    create|delete|list|listnicknamesof)
+        _common_options
+        return 0
+        ;;
+    esac
+
+    COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
+}
+
+# gapps-tool 
+_gapps_tool()
+{
+    local subcommands cur pos_1
+    subcommands="user group ou nickname"
+    pos_1="${COMP_WORDS[1]}"
+    cur="${COMP_WORDS[COMP_CWORD]}"
+
+    # prevent stopping
+    if [[ "${cur}" == ${pos_1} ]];then
+        COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
+        return 0
+    fi
+
+    case "${pos_1}" in
+    user|group|ou|nickname)
+        _${pos_1}
+        return 0
+        ;;
+    esac
+
+    COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
+}
+
+complete -F _gapps_tool gapps-tool
