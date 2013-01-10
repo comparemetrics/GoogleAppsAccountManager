@@ -31,5 +31,6 @@ setup( name         = 'GoogleAppsAccountManager'
                       ]
      , package_dir  = {'GoogleAppsAccountManager':'src/GoogleAppsAccountManager'}
      , scripts      = ['bin/gapps-tool']
+     , data_files   = [('/etc/bash_completion.d', ['bash_completion.d/gapps-tool'])]
      )
 

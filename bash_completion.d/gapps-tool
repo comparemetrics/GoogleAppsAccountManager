@@ -68,6 +68,48 @@ _user()
     COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
 }
 
+_user2()
+{
+    local subcommands cur pos_2
+    COMPREPLY=()
+    subcommands="create modify delete disable enable passwd list assignadmin demoteadmin"
+    pos_2="${COMP_WORDS[2]}"
+    cur="${COMP_WORDS[COMP_CWORD]}"
+
+    # prevent stopping
+    if [[ "${cur}" == ${pos_2} ]];then
+        COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
+        return 0
+    fi
+
+    case "${pos_2}" in
+    create)
+        _common_options
+        COMPREPLY+=( $( compgen -W "--md5 --lock --assign-administrator --no-change-password-at-next-login" -- ${cur} ) )
+        return 0
+        ;;
+    modify)
+        _common_options
+        COMPREPLY+=( $( compgen -W "--password --md5 --lock --unlock --sn --given-name --assign-administrator --demote-administrator --change-password-at-next-login --no-change-password-at-next-login" -- ${cur} ) )
+        return 0
+        ;;
+    passwd)
+        _common_options
+        COMPREPLY+=( $( compgen -W "--md5" -- ${cur} ) )
+        return 0
+        ;;
+    delete|disable|enable|list)
+        _common_options
+        return 0
+        ;;
+    assignadmin|demoteadmin)
+        return 0
+        ;;
+    esac
+
+    COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
+}
+
 _group()
 {
     local subcommands cur pos_2
@@ -159,7 +201,7 @@ _nickname()
 _gapps_tool()
 {
     local subcommands cur pos_1
-    subcommands="user group ou nickname"
+    subcommands="user user2 group ou nickname"
     pos_1="${COMP_WORDS[1]}"
     cur="${COMP_WORDS[COMP_CWORD]}"
 
@@ -170,7 +212,7 @@ _gapps_tool()
     fi
 
     case "${pos_1}" in
-    user|group|ou|nickname)
+    user|user2|group|ou|nickname)
         _${pos_1}
         return 0
         ;;
