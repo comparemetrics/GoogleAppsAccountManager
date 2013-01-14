@@ -2,7 +2,7 @@
 # Copyright (C) 2012-2013 KAMEI Yutaka
 #
 # License: GNU General Public License version 2 or later
-# Date: 2013-01-10, since 2012-12-28
+# Date: 2013-01-14, since 2012-12-28
 #
 
 # Common options
@@ -221,4 +221,4 @@ _gapps_tool()
     COMPREPLY=( $( compgen -W "${subcommands}" -- ${cur} ) )
 }
 
-complete -F _gapps_tool gapps-tool
+complete -o filenames -F _gapps_tool gapps-tool
