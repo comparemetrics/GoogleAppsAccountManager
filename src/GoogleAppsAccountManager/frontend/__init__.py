@@ -14,12 +14,13 @@ Available subcommands:
   user            - User management
   user2           - Enhanced user management. This can manage multiple domain
   nickname        - Nickname Management
+  nickname2       - Enhanced nickname management. This can manage multiple domain
   group           - Group management
   ou              - Organizational unit management
 
 """
 
-from GoogleAppsAccountManager.frontend import user, user2, nickname, group, ou
+from GoogleAppsAccountManager.frontend import user, user2, nickname, nickname2, group, ou
 import argparse 
 
 def run(subcommand, options):
