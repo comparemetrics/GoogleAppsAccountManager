@@ -94,7 +94,14 @@ def _runSubcommand(options, parser, my_name, subcommand_dict, help):
         if must in options:
             must_cnt += 1
     if must_cnt < 2:
-        if  param_dict is not None:
+        if  param_dict is None:
+            sys.stderr.write(_messages.ADMIN_OR_DOMIN_NOT_SPECIFIED)
+            return False
+        elif type(param_dict) == type(str()):
+            sys.stderr.write("{}\n".format(param_dict))
+            sys.stderr.write(_messages.INVALID_CONFIG_FILE)
+            return False
+        else:
             options += [ "-A", param_dict["admin_name"]
                        , "-D", param_dict["domain"]
                        ]
@@ -103,9 +110,6 @@ def _runSubcommand(options, parser, my_name, subcommand_dict, help):
                     pass
                 else:
                     options += ["-r", param_dict["result_file"]]
-        else:
-            sys.stderr.write(_messages.ADMIN_OR_DOMIN_NOT_SPECIFIED)
-            return False
 
     # Operate subcommand
     try:

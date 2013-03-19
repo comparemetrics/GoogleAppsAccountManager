@@ -53,7 +53,10 @@ def parseConfig(specified_config=None):
         return None
 
     param_dict = "{" + config_file.read().replace("\n", ",") + "}"
-    param_dict = eval(param_dict)
+    try:
+        param_dict = eval(param_dict)
+    except Exception, e:
+        return str(e)
 
     if not param_dict.has_key("admin_name") or not param_dict.has_key("domain"):
         return None

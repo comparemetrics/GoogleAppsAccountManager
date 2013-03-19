@@ -22,6 +22,11 @@ ADMIN_OR_DOMIN_NOT_SPECIFIED = (
 """
 )
 
+INVALID_CONFIG_FILE = (
+"""Invalid parameter is specified in Configuration file.
+"""
+)
+
 ADMIN_LOGIN_FAILED = (
 """Failed to login by administrator's account. Check password.
 """
